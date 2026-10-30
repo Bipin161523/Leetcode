@@ -1,19 +1,23 @@
 class Solution {
 public:
-    int solve(vector<int>&nums,int idx,int n,vector<int>&v){
-        if(idx >= n)return 0;
-        if(v[idx] != -1){
-            return v[idx];
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+
+        if(n==1){
+            return nums[0];
         }
 
-        int steal = nums[idx] + solve(nums,idx+2,n,v);
-        int skip  = solve(nums,idx+1,n,v);
+        vector<int>t(n+1,0);
 
-        return v[idx] = max(steal,skip);
-    }
-    int rob(vector<int>& nums) {
-        vector<int>v(101,-1);
-        int n = nums.size();
-        return solve(nums,0,n,v);
+        t[0] = 0;
+        t[1] = nums[0];
+
+        for(int i=2;i<=n;i++){
+            int steal = nums[i-1] + t[i-2];
+            int skip = t[i-1];
+            t[i] = max(steal,skip);
+        }
+
+        return t[n];
     }
 };
